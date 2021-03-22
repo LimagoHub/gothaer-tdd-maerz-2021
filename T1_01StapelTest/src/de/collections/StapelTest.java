@@ -110,4 +110,19 @@ class StapelTest {
 		
 	}
 
+	@Test
+	public void isFull_FillUpToLimit_returnTrue() throws Exception{
+		
+		
+		for (int i = 0; i < 10; i++) {
+			objectUnderTest.push(new Object());
+			 
+		}
+		
+		
+		
+		assertTrue( objectUnderTest.isFull());
+		
+	}
+
 }
