@@ -1,5 +1,8 @@
 package de.gothaer.bestelldemo.services;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import de.gothaer.bestelldemo.repositories.BestellRepository;
 import de.gothaer.bestelldemo.repositories.model.Bestellung;
 
@@ -27,6 +30,14 @@ public class BestellServiceImpl {
 	 * 8. Jeder Service darf max 1 mal berührt werden
 	 */
 	public void erfasseBestellung(Bestellung bestellung, /* M oder V danach genau 10 Ziffern */ String creditcard, double saldo) throws BestellServiceException, KundeIstPleiteException {
+		final Pattern pattern = Pattern.compile("^(M|V)(\\d{10})$");
 		
+		
+		
+		Matcher matcher = pattern.matcher(creditcard);
+		if(! matcher.matches()) throw new BestellServiceException("cardnumber has wrong format");
+		
+		matcher.group(2);
+
 	}
 }
