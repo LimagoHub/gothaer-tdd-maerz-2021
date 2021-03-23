@@ -1,35 +1,36 @@
 package de.collections;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Stapel {
 	
-	private List<Object> data;
-	
+	private Object [] data;
+	private int index;
 	
 	public Stapel() {
-		data = new ArrayList<>();
-		
+		data = new Object[10];
+		index = 0;
 	}
 	
 	public void push(Object value) throws StapelException{
-		if(isFull()) throw new StapelException("Overflow");
-		data.add(value);
+		
+		try {
+			data[index ++] = value;
+		} catch (Exception e) {
+			throw new StapelException("Overflow", e);
+		}
 	}
 	
 	public Object pop() throws StapelException{
 		if(isEmpty()) throw new StapelException("Underflow");
-		return data.remove(data.size() - 1);
+		return data[--index];
 	}
 	
 	
 	public boolean isEmpty() {
-		return data.isEmpty();
+		return index <= 0;
 	}
 
 	public boolean isFull() {
-		return false;
+		return index >= data.length;
 	}
 
 }
