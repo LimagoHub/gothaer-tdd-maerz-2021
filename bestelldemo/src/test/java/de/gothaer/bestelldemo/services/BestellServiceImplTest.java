@@ -80,6 +80,13 @@ public class BestellServiceImplTest {
 					() -> objectUnderTest.erfasseBestellung(VALID_ORDER, "X0123456789", VALID_SALDO));
 			assertEquals("Falsches Kartenformat.", ex.getMessage());
 		}
+		
+		@Test
+		void bestellen_NoDigitAfterCardtype_throwsBestellServiceException() throws Exception {
+			BestellServiceException ex = assertThrows(BestellServiceException.class,
+					() -> objectUnderTest.erfasseBestellung(VALID_ORDER, "M0123x56789", VALID_SALDO));
+			assertEquals("Falsches Kartenformat.", ex.getMessage());
+		}
 	}
 
 	@Nested
@@ -111,6 +118,15 @@ public class BestellServiceImplTest {
 			BestellServiceException ex = assertThrows(BestellServiceException.class,
 					() -> objectUnderTest.erfasseBestellung(VALID_ORDER, VALID_MASTERCARD, VALID_SALDO));
 			assertEquals("Solvenzservice antwortet nicht.", ex.getMessage());
+		}
+
+		@Test
+		void bestellen_UnexpectedRuntimeExceptionInCreditcard_throwsBestellServiceException() throws Exception {
+			when(solvenzServiceMock.checkSolvenz(anyString(), anyString(), anyDouble()))
+					.thenThrow(new ArithmeticException("upps"));
+			BestellServiceException ex = assertThrows(BestellServiceException.class,
+					() -> objectUnderTest.erfasseBestellung(VALID_ORDER, VALID_MASTERCARD, VALID_SALDO));
+			assertEquals("Fehler im Service.", ex.getMessage());
 		}
 
 		@Test
